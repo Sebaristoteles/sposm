@@ -93,6 +93,14 @@ RUN mv /root/bin/phantomjs /usr/local/bin
 
 RUN chown -R rstudio:staff /opt/TinyTeX
 
+
+RUN  R -e "install.packages('RODBC', repos = c(CRAN = 'https://mran.microsoft.com/snapshot/2019-09-25'))"
+
+RUN apt-get install -y --no-install-recommends cargo
+
+RUN R -e "devtools::install_github('r-rust/gifski')"
+
+
 # The below invalidates the cache whenever the Head of the Github repo changes
 ADD https://api.github.com/repos/joachim-gassen/sposm/git/refs/heads/master version.json  
 
