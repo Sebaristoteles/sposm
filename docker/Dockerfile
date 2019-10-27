@@ -96,4 +96,5 @@ RUN chown -R rstudio:staff /opt/TinyTeX
 ADD https://api.github.com/repos/joachim-gassen/sposm/git/refs/heads/master version.json  
 
 RUN cd /home/rstudio \
-  && sudo -H -u rstudio git clone https://github.com/joachim-gassen/sposm.git
+#  && sudo -H -u rstudio git clone https://github.com/joachim-gassen/sposm.git
+  && sudo -H -u rstudio git clone https://github.com/Sebaristoteles/sposm.git
