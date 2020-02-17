@@ -1,13 +1,14 @@
 library(testthat)
+library(here)
 
 # desc_table returns selected descriptive statistics for each numerical and 
 # logical variable in a data frame. It uses a reasonable default of statistics 
 # but the user can provide a vector containing statistical function to apply.
 # desc_table purges missing values prior to the analysis.
 
+setwd(here::here())
 
-setwd("../..")
-
+# ---------------------------  ----------------------------------
 context("test parameters of function desc_table()")
 
 test_that("test whether `code/desc_table.R` is present",{
@@ -27,7 +28,7 @@ test_that("desc_table() requires a data frame as first parameter", {
   expect_error(desc_table(data.frame(a = 1:10, b = 1:10)), NA)
 })
 
-# Prepare a test data frame  
+# --------------------------- Prepare a test data frame ----------------------------------
 mat <- matrix(rnorm(1000), nrow = 100, ncol = 10)
 colnames(mat) <- paste0("numeric", 1:10)
 df <- as.data.frame(mat)
@@ -36,6 +37,7 @@ df$factor2 <- as.factor(sample(letters[6:10], 100, replace = TRUE))
 df$logical <- sample(c(TRUE, FALSE), 100, replace = TRUE) 
 df$character <- sample(c("BLUB", "BLOBB", "BLABB"), 100, replace = TRUE) 
 
+# ---------------------------  ----------------------------------
 test_that("desc_table() accepts a vector of functions as a second parameter", {
   expect_error(desc_table(df, 1L))
   expect_error(desc_table(df, 1:10))
@@ -49,10 +51,12 @@ test_that("desc_table() accepts a vector of functions as a second parameter", {
 
 context("test return value of desc_table()")
 
+# --------------------------- test for data frame ----------------------------------
 test_that("desc_table() returns a data frame", {
   expect_true(is.data.frame(desc_table(df)))
 })
 
+# --------------------------- test for correct number of rows ----------------------------------
 test_that("desc_table() returns a data frame with correct rows", {
   expected_rows <- sum(sapply(df, is.numeric)) + sum(sapply(df, is.logical))
   rv <- desc_table(df)
@@ -61,6 +65,7 @@ test_that("desc_table() returns a data frame with correct rows", {
   expect_equal(rownames(rv), names(df)[sapply(df, is.numeric) | sapply(df, is.logical)])
 })
 
+# --------------------------- test for correct number of columns ----------------------------------
 test_that("desc_table() returns a data frame with correct columns", {
   funcs <- c(n = function(x) sum(is.finite(x)), mean = mean, sd = sd, 
                  min = min, 
